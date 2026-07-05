@@ -1,1 +1,1 @@
-# personal portfolio website: https://jaiwoods.github.io/jaiwoodsportfolio/
+# personal portfolio website: https://jaiwoods.github.io/portfolio/
