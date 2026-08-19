@@ -98,7 +98,10 @@
   .btn-primary:hover { box-shadow:0 0 25px var(--accent-glow); transform:translateY(-2px); }
 
   #globe-container { flex:1; min-height:500px; position:relative; z-index:1; }
-  .scroll-indicator { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); z-index:3; display:flex; flex-direction:column; align-items:center; gap:0.5rem; animation:float 2.5s ease-in-out infinite; }
+  .globe-fade-top, .globe-fade-bottom { position:absolute; left:0; right:0; z-index:2; pointer-events:none; }
+  .globe-fade-top { top:0; height:240px; background:linear-gradient(to bottom, var(--bg-primary) 0%, rgba(8,8,15,0.55) 45%, transparent 100%); }
+  .globe-fade-bottom { bottom:0; height:200px; background:linear-gradient(to top, var(--bg-primary) 0%, transparent 100%); }
+  .scroll-indicator { position:absolute; bottom:6rem; left:50%; transform:translateX(-50%); z-index:3; display:flex; flex-direction:column; align-items:center; gap:0.5rem; animation:float 2.5s ease-in-out infinite; }
   .scroll-indicator span { font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); }
   .scroll-line { width:1px; height:40px; background:linear-gradient(to bottom,var(--accent),transparent); }
   @keyframes float { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
@@ -130,6 +133,30 @@
   .project-card p { font-size:0.88rem; color:var(--text-secondary); line-height:1.6; margin-bottom:1rem; }
   .project-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
   .tag { font-family:var(--font-mono); font-size:0.65rem; padding:0.3rem 0.65rem; background:var(--accent-dim); color:var(--accent); border-radius:4px; letter-spacing:0.5px; }
+
+  .portfolio-list { display:flex; flex-direction:column; gap:2rem; }
+  .portfolio-block { display:flex; gap:2.2rem; background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:2rem; transition:border-color 0.3s, box-shadow 0.3s; }
+  .portfolio-block:hover { border-color:rgba(79,195,247,0.3); box-shadow:0 15px 40px rgba(0,0,0,0.3); }
+  .portfolio-media { flex:0 0 40%; min-width:0; }
+  .portfolio-media img { width:100%; display:block; border-radius:8px; border:1px solid var(--border); cursor:zoom-in; transition:opacity 0.25s; background:#0a0a12; }
+  .portfolio-media img:hover { opacity:0.85; }
+  .portfolio-media object { width:100%; height:340px; border-radius:8px; border:1px solid var(--border); background:#e8e8f0; }
+  .portfolio-media object p { padding:1.5rem; font-size:0.85rem; color:#333; }
+  .portfolio-info { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .portfolio-info h3 { font-size:1.35rem; font-weight:700; margin-bottom:0.8rem; letter-spacing:-0.3px; }
+  .portfolio-info p.portfolio-summary { font-size:0.92rem; line-height:1.75; color:var(--text-secondary); margin-bottom:1.2rem; }
+  .portfolio-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.2rem; }
+  .portfolio-link { margin-top:auto; display:inline-flex; align-items:center; gap:0.4rem; font-family:var(--font-mono); font-size:0.75rem; color:var(--accent); text-decoration:none; letter-spacing:0.5px; border-bottom:1px solid rgba(79,195,247,0.4); padding-bottom:2px; width:fit-content; transition:border-color 0.2s, opacity 0.2s; }
+  .portfolio-link:hover { border-color:var(--accent); opacity:0.8; }
+
+  .resume-embed { max-width:700px; margin:0 auto; }
+  .resume-embed object { width:100%; height:600px; border-radius:8px; border:1px solid var(--border); background:#e8e8f0; }
+  .resume-embed object p { padding:1.5rem; font-size:0.85rem; color:#333; }
+
+  @media (max-width:768px) {
+    .portfolio-block { flex-direction:column; }
+    .portfolio-media { flex:none; width:100%; }
+  }
 
   .skills-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
   .skill-group h3 { font-size:0.9rem; font-weight:600; margin-bottom:1.2rem; color:var(--text-primary); }
@@ -177,6 +204,7 @@
   <a href="#hero" class="nav-logo">JAI WOODS</a>
   <div class="nav-links">
     <a href="#about">About</a>
+    <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
     <a href="#resume">Resume</a>
     <a href="#contact">Contact</a>
@@ -215,15 +243,78 @@
     <div class="section-divider"></div>
   </div>
   <div class="about-text fade-in">
-    <p>Hello! I'm a fourth-year student soon to graduate from UC Santa Barbara double majoring in Economics and Geography with an emphasis in GIS. My work sits at the intersection of spatial analysis, economic systems, and emerging technology.</p>
-    <p>As a GIS analyst with experience in remote sensing, LiDAR data, and spatial modeling, I am fascinated by how spatial thinking can be applied to business and development for improved efficiency, growth, and site selection. I'm currently studying for the FAA Part 107 Remote Pilot License and have hands-on experience operating drones for research and content creation.</p>
-    <p>I'm exploring how geospatial intelligence, real estate analytics, and drone technology converge, and I'm looking for opportunities to put that to work. If you need someone who understands the spatial dimension of investment as well as the financial side, I am the perfect candidate for your role. In the real estate investment and development world, these roles tend to be separate, with geospatial professionals and financial modelers speaking different languages. I aspire to bridge that gap and synergize these roles, pulling from my education and experience in both.</p>
+    <p>Hello! I'm a recent UC Santa Barbara graduate with a double major in Economics and Geography, emphasis in GIS. My work sits at the intersection of spatial analysis, economic systems, and emerging technology.</p>
+    <p>As a GIS analyst with experience in remote sensing, LiDAR data, and spatial modeling, I am fascinated by how spatial thinking can be applied to business and development for improved efficiency, growth, and site selection. I currently work part-time as a GIS & Cartography Subcontractor for Barefoot Earthworks, and I hold an FAA Part 107 Remote Pilot License with hands-on experience operating drones for research and content creation.</p>
+    <p>I'm exploring how geospatial intelligence, real estate analytics, and drone technology converge, and I'm looking for opportunities to put that to work. If you need someone who understands the spatial dimension of investment as well as the financial side, I am the perfect candidate for your role. In the real estate investment and development world, these roles tend to be separate, with geospatial professionals and financial modelers speaking different languages. I aspire to bridge that gap and synergize these roles &mdash; from underwriting an 8-unit investment property with a full pro forma to running multi-criteria suitability models for pumped hydroelectric siting across California.</p>
+  </div>
+</section>
+
+<section id="projects" class="content-section">
+  <div class="fade-in">
+    <div class="section-label">02 — Projects</div>
+    <h2 class="section-title">Selected Projects</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="portfolio-list fade-in">
+
+    <div class="portfolio-block">
+      <div class="portfolio-media">
+        <object data="assets/projects/farmhouse-acquisition.pdf" type="application/pdf">
+          <p>PDF preview unavailable in this browser. <a href="assets/projects/farmhouse-acquisition.pdf" target="_blank" style="color:var(--accent);">Open the deck directly</a>.</p>
+        </object>
+      </div>
+      <div class="portfolio-info">
+        <h3>The Farmhouse Acquisition</h3>
+        <p class="portfolio-summary">Underwrote the acquisition of an 8-unit motel in Buellton, CA, after a new city ordinance forced its conversion back from long-term apartments to short-term rental use. Built a full 5-year pro forma modeling the STR conversion, capital expenditures, and an adjacent-property expansion, projecting an 18% stabilized cash-on-cash yield and a ~33% unlevered IRR. Presented the deal and final recommendation to real estate investors for the Gaucho Real Estate Association.</p>
+        <div class="portfolio-tags"><span class="tag">Real Estate Underwriting</span><span class="tag">Financial Modeling</span><span class="tag">Pro Forma</span></div>
+        <a href="assets/projects/farmhouse-acquisition.pdf" target="_blank" class="portfolio-link">Open Full Deck ↗</a>
+      </div>
+    </div>
+
+    <div class="portfolio-block">
+      <div class="portfolio-media">
+        <a href="assets/projects/pumped-hydro-poster.jpg" target="_blank"><img src="assets/projects/pumped-hydro-poster.jpg" alt="Suitability Analysis of Pumped Hydroelectric Energy Storage in Southern California — research poster"></a>
+      </div>
+      <div class="portfolio-info">
+        <h3>Pumped Hydro Site Suitability Modeling</h3>
+        <p class="portfolio-summary">Ran a multi-criteria GIS suitability and risk analysis to identify the best sites for pumped hydroelectric energy storage paired with solar generation across Orange, Imperial, Riverside, and San Diego counties. Weighted six variables — slope, water body proximity, transmission access, and more — in ArcGIS Pro to rank locations, then validated the top five sites with gravitational potential energy calculations. Found that Diamond Valley Lake could power over 600,000 homes at full capacity.</p>
+        <div class="portfolio-tags"><span class="tag">ArcGIS Pro</span><span class="tag">Suitability Analysis</span><span class="tag">Multi-Criteria Modeling</span></div>
+        <a href="assets/projects/pumped-hydro-poster.jpg" target="_blank" class="portfolio-link">View Full Poster ↗</a>
+      </div>
+    </div>
+
+    <div class="portfolio-block">
+      <div class="portfolio-media">
+        <object data="assets/projects/la-olympics-transit.pdf" type="application/pdf">
+          <p>PDF preview unavailable in this browser. <a href="assets/projects/la-olympics-transit.pdf" target="_blank" style="color:var(--accent);">Open the deck directly</a>.</p>
+        </object>
+      </div>
+      <div class="portfolio-info">
+        <h3>LA 2028 Olympics Transit Access</h3>
+        <p class="portfolio-summary">Analyzed walking, bus, and metro accessibility to LA 2028 Olympic venues using census, hotel, and transit stop data. Used Local Moran's I spatial autocorrelation and regression to flag hotel clusters with poor public transit access, informing recommendations for bus route expansion ahead of the Games. Found that roughly 1.18 million residents have adequate transit or walking access to a venue.</p>
+        <div class="portfolio-tags"><span class="tag">Spatial Statistics</span><span class="tag">Network Analysis</span><span class="tag">Census Data</span></div>
+        <a href="assets/projects/la-olympics-transit.pdf" target="_blank" class="portfolio-link">Open Full Deck ↗</a>
+      </div>
+    </div>
+
+    <div class="portfolio-block">
+      <div class="portfolio-media">
+        <a href="assets/projects/glof-alaska-poster.jpg" target="_blank"><img src="assets/projects/glof-alaska-poster.jpg" alt="Spatial Extent Change Analysis of Glacial Lake Outburst Flooding Events near Juneau, Alaska — research poster"></a>
+      </div>
+      <div class="portfolio-info">
+        <h3>Glacial Flood Risk Mapping, Alaska</h3>
+        <p class="portfolio-summary">Investigated whether satellite-based water-index analysis (NDWI) can predict Glacial Lake Outburst Flood (GLOF) events near Juneau, Alaska before they happen. Combined NDWI change detection with a DEM of the basin to track two 2024 flood events, finding that satellite detection preceded peak discharge by hours — a promising signal for early warning systems in hard-to-monitor terrain.</p>
+        <div class="portfolio-tags"><span class="tag">Remote Sensing</span><span class="tag">NDWI</span><span class="tag">Disaster Planning</span></div>
+        <a href="assets/projects/glof-alaska-poster.jpg" target="_blank" class="portfolio-link">View Full Poster ↗</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <section id="skills" class="content-section">
   <div class="fade-in">
-    <div class="section-label">02 — Skills</div>
+    <div class="section-label">03 — Skills</div>
     <h2 class="section-title">Skills</h2>
     <div class="section-divider"></div>
   </div>
@@ -231,45 +322,45 @@
     <div class="project-card">
       <div class="project-icon">🌐</div>
       <h3>GIS & Spatial Analysis</h3>
-      <p>Geospatial analysis using ArcGIS Pro, QGIS, and Google Earth Engine — suitability analysis, network analysis, LiDAR data management, and classification techniques.</p>
-      <div class="project-tags"><span class="tag">ArcGIS Pro</span><span class="tag">QGIS</span><span class="tag">ENVI</span><span class="tag">Google Earth Engine</span></div>
+      <p>3 years across ArcGIS Pro, ArcGIS Online, QGIS, ENVI, and Google Earth Engine, covering geodatabases, DEM/DSM modeling, suitability & risk analysis, and network analysis.</p>
+      <div class="project-tags"><span class="tag">ArcGIS Pro</span><span class="tag">QGIS</span><span class="tag">ENVI</span><span class="tag">Google Earth Engine</span><span class="tag">Utility Network</span></div>
     </div>
     <div class="project-card">
       <div class="project-icon">🚁</div>
       <h3>Aerial Drone Operations</h3>
-      <p>Drone operation for research, mapping, and aerial content creation. Currently studying for FAA Part 107 certification.</p>
-      <div class="project-tags"><span class="tag">Part 107 (In Progress)</span><span class="tag">DJI Drones</span><span class="tag">LiDAR</span></div>
+      <p>FAA Part 107 certified drone pilot: photography, videography, photogrammetry, mapping, 3D modeling, and LiDAR collection & inspections.</p>
+      <div class="project-tags"><span class="tag">Part 107 Certified</span><span class="tag">DJI Matrice 300 RTK</span><span class="tag">DJI Mini 5 Pro</span><span class="tag">LiDAR</span><span class="tag">Photogrammetry</span></div>
     </div>
     <div class="project-card">
       <div class="project-icon">📊</div>
       <h3>Economic Analysis</h3>
-      <p>Applied economic analysis — econometrics, regression modeling, micro and macro theory. Coursework in data science, statistics, and quantitative methods.</p>
-      <div class="project-tags"><span class="tag">Econometrics</span><span class="tag">R</span><span class="tag">Python</span><span class="tag">Data Viz</span></div>
+      <p>Econometrics, regression modeling, and financial analysis, from real estate underwriting and pro formas to feasibility studies for infrastructure siting.</p>
+      <div class="project-tags"><span class="tag">Econometrics</span><span class="tag">Financial Modeling</span><span class="tag">R</span><span class="tag">Python</span></div>
     </div>
     <div class="project-card">
       <div class="project-icon">💻</div>
       <h3>Programming</h3>
-      <p>Intermediate proficiency across multiple languages. Experience with data analysis, software design, geospatial scripting, and web development.</p>
-      <div class="project-tags"><span class="tag">Python</span><span class="tag">R</span><span class="tag">C / C++</span><span class="tag">C#</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
+      <p>Data analysis, geospatial scripting, and web development, including automated Python pipelines for structuring raw sensor and geospatial data.</p>
+      <div class="project-tags"><span class="tag">Python (pandas, GeoPandas)</span><span class="tag">SQL</span><span class="tag">R</span><span class="tag">C / C++</span><span class="tag">C#</span><span class="tag">HTML / CSS</span><span class="tag">JavaScript</span></div>
     </div>
     <div class="project-card">
       <div class="project-icon">🎬</div>
       <h3>Videography & Content</h3>
-      <p>Video production and editing as a creative hobby — drone footage, gimbal shooting, and post-production workflows.</p>
+      <p>Producing and editing video as a creative hobby, from drone footage to gimbal shooting and color grading.</p>
       <div class="project-tags"><span class="tag">DaVinci Resolve</span><span class="tag">Insta360</span><span class="tag">YouTube</span></div>
     </div>
     <div class="project-card">
-      <div class="project-icon">🎵</div>
-      <h3>Electronic Music & DJing</h3>
-      <p>Hobby interest in electronic music production and DJ mixing — afrohouse and Melodic Techno genres.</p>
-      <div class="project-tags"><span class="tag">Afrohouse</span><span class="tag">Melodic Techno</span><span class="tag">Music Production</span></div>
+      <div class="project-icon">📝</div>
+      <h3>Technical Documentation & Support</h3>
+      <p>Writing workflow documentation and deployment guides, supporting technical sessions and workshops, and troubleshooting across teams and software platforms.</p>
+      <div class="project-tags"><span class="tag">Documentation</span><span class="tag">Workshop Support</span><span class="tag">Cross-functional Collaboration</span></div>
     </div>
   </div>
 </section>
 
 <section id="resume" class="content-section">
   <div class="fade-in">
-    <div class="section-label">03 — Resume</div>
+    <div class="section-label">04 — Resume</div>
     <h2 class="section-title">Experience & Education</h2>
     <div class="section-divider"></div>
   </div>
@@ -279,7 +370,7 @@
         <h3>Skills</h3>
         <div class="skill-item"><span>GIS / Remote Sensing</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
         <div class="skill-item"><span>Economic Analysis</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
-        <div class="skill-item"><span>Drone Operations</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+        <div class="skill-item"><span>Drone Operations (Part 107)</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
         <div class="skill-item"><span>DaVinci Resolve</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
         <div class="skill-item"><span>Written & Oral Communication</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div></div></div>
         <div class="skill-item"><span>Accounting & Finance</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
@@ -288,6 +379,7 @@
         <h3>Programming Languages</h3>
         <div class="skill-item"><span>Python</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
         <div class="skill-item"><span>R</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div></div></div>
+        <div class="skill-item"><span>SQL</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
         <div class="skill-item"><span>JavaScript</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
         <div class="skill-item"><span>HTML / CSS</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
         <div class="skill-item"><span>C</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
@@ -295,19 +387,29 @@
         <div class="skill-item"><span>C#</span><div class="skill-dots"><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div></div></div>
       </div>
       <div class="experience-block" style="margin-top:2.5rem;">
-        <h3>University of Iowa — Edge of Space Program</h3>
-        <p class="exp-role">Physics & Astronomy Dept · July – August 2025</p>
-        <p>3D printed sensor payload housing for DJI Matrice 300 RTK. Assembled electronic components including Raspberry Pi, LiDAR sensor, and camera. Launched 6 drone flights over Ashton Prairie collecting LiDAR point data and RGB imagery. Presented findings on vegetation height data at research symposium.</p>
+        <h3>GIS & Cartography Subcontractor</h3>
+        <p class="exp-role">Barefoot Earthworks (Part-time) · Sonoma County, CA · July 2026 – Present</p>
+        <p>Delivering geospatial site analysis, topographic mapping, and grading layouts for a 100+ acre retreat property development. Developed high-resolution DEMs/DSMs, slope profiles, and watershed drainage models in QGIS to guide heavy equipment earthwork and access routing. Produced topographic maps, satellite hybrid views, and hill aspects to streamline municipal permitting reviews.</p>
       </div>
       <div class="experience-block">
-        <h3>The Nature Conservancy — BEL Program</h3>
-        <p class="exp-role">Bren Environmental Leadership · June – September 2024</p>
-        <p>Spearheaded creation of a user guide for a deep-learning satellite whale-detection tool. Collaborated with NOAA conservationists on whale population protection. Gained experience in machine learning (CNNs) and applied remote sensing for conservation management.</p>
+        <h3>Esri Student Assistant</h3>
+        <p class="exp-role">Esri · San Diego, CA · July 2026</p>
+        <p>Selected for the competitive Esri Student Assistantship to support technical sessions, user workshops, and event operations at the annual Esri User Conference. Sat in on sessions spanning Utility Network data models and digital twins, site surveying technology, and real estate & property data platforms, gaining a broad view of how organizations across industries put the Esri ecosystem to work.</p>
       </div>
       <div class="experience-block">
-        <h3>Freelance Tradesman</h3>
-        <p class="exp-role">Sonoma County, CA · May 2017 – August 2023</p>
-        <p>Provided construction and landscaping services to multiple clients. Managed small-scale projects independently — budgeting, scheduling, client communication. Contributed to dozens of residential improvement projects.</p>
+        <h3>UAS Technician and Geospatial Data Researcher</h3>
+        <p class="exp-role">University of Iowa Physics & Astronomy Dept · Iowa City, IA · July – August 2025</p>
+        <p>Engineered custom 3D-printed payload housing to secure LiDAR and RGB sensor arrays onto a DJI Matrice 300 RTK drone. Integrated microcontrollers, Raspberry Pi, and battery systems via custom circuitry, and developed automated Python pipelines to collect and structure raw sensor data. Conducted 6 UAS flights capturing LiDAR point clouds and photogrammetric data over preserved grassland sites; executed spatial suitability and canopy height modeling using SfM photogrammetry and presented findings at a university research symposium.</p>
+      </div>
+      <div class="experience-block">
+        <h3>Technical Research Intern</h3>
+        <p class="exp-role">The Nature Conservancy (Bren Environmental Leadership Program) · Santa Barbara, CA · June – September 2024</p>
+        <p>Authored technical workflow documentation and deployment guides for deep-learning based whale detection software. Collaborated with NOAA and TNC scientists to integrate technical documentation across software platforms. Applied convolutional neural networks (CNNs) and machine-learning frameworks for spatial image classification and large-scale geospatial queries.</p>
+      </div>
+      <div class="experience-block">
+        <h3>Apprentice Tradesman</h3>
+        <p class="exp-role">Sonoma County, CA · May 2019 – June 2026</p>
+        <p>Performed residential electrical, construction, plumbing, landscaping, and property-maintenance work while in school, under various contractors. Planned and executed residential electrical and plumbing layouts, operated heavy equipment, and adapted work to field conditions. Managed project design, budgeting, scheduling, and quality control, always keeping safety front of mind on the job site.</p>
       </div>
     </div>
     <div>
@@ -317,13 +419,19 @@
         <p style="color:var(--accent); margin-top:0.3rem; font-size:0.8rem;">Class of 2026</p>
       </div>
       <div class="cert-block">
-        <h3>FAA Part 107 (In Progress)</h3>
-        <p>Studying for Remote Pilot Certificate — Small Unmanned Aircraft Systems</p>
+        <h3>Certificates</h3>
+        <p>FAA Part 107 — Remote Pilot Certificate, Small Unmanned Aircraft Systems</p>
+        <p style="margin-top:0.4rem;">Permaculture Design Certificate — Permaculture Artisans</p>
       </div>
       <div class="cert-block">
         <h3>Positions</h3>
-        <p>Geography Club Co-President — organize events, manage the board, handle outreach</p>
-        <p style="margin-top:0.4rem;">Isla Vista Housing Co-op Treasurer — manage $21,000+ in monthly rental revenue, ensure timely payments and accounting</p>
+        <p><strong style="color:var(--text-primary);">Geography Club Co-President</strong> — UCSB Geography Dept · Sept 2025 – June 2026 — organize events, manage the board, handle outreach</p>
+        <p style="margin-top:0.4rem;"><strong style="color:var(--text-primary);">House Treasurer</strong> — Isla Vista Student Housing Co-op · Sept – Dec 2025 — audited $21,000+ in monthly rent & utilities payments, resolved transaction issues, managed budgeting</p>
+      </div>
+      <div class="cert-block">
+        <h3>Projects</h3>
+        <p><strong style="color:var(--text-primary);">Pumped Hydroelectric Suitability Modeling</strong> (Apr – June 2025) — Multi-criteria spatial suitability & risk analysis for pumped hydro storage in California using ArcGIS Pro; evaluated transmission lines, land use, slope, and zoning to select 5 ideal sites.</p>
+        <p style="margin-top:0.6rem;"><strong style="color:var(--text-primary);">Gaucho Real Estate Association Underwriting Project</strong> (May 2026) — Underwrote a $1.9M, 8-unit investment property in Buellton, CA; built a five-year pro forma and exit strategy, presented to real estate investors for feedback.</p>
       </div>
       <div class="cert-block">
         <h3>Coursework</h3>
@@ -334,7 +442,7 @@
       <div class="cert-block">
         <h3>Tools & Software</h3>
         <div class="pill-list">
-          <span class="pill">ESRI Suite (ArcGIS Pro, Online)</span><span class="pill">ENVI</span><span class="pill">Google Earth Engine</span><span class="pill">DaVinci Resolve</span><span class="pill">DJI Drones</span><span class="pill">Insta360</span><span class="pill">Microsoft Office</span><span class="pill">Google Suite</span><span class="pill">Globe.gl</span><span class="pill">Three.js</span>
+          <span class="pill">ESRI Suite (ArcGIS Pro, Online)</span><span class="pill">QGIS</span><span class="pill">ENVI</span><span class="pill">Google Earth Engine</span><span class="pill">GeoPandas</span><span class="pill">DaVinci Resolve</span><span class="pill">DJI Matrice 300 RTK</span><span class="pill">Insta360</span><span class="pill">Microsoft Office</span><span class="pill">Google Suite</span><span class="pill">Globe.gl</span><span class="pill">Three.js</span>
         </div>
       </div>
       <div class="cert-block">
@@ -345,14 +453,19 @@
       </div>
     </div>
   </div>
-  <div style="text-align:center; margin-top:3rem;" class="fade-in">
-    <p style="font-size:0.9rem; color:var(--text-secondary);">Full resume available on my <a href="https://github.com/jaiwoods/jaiwoodsportfolio/blob/main/resume_april_2026.pdf" target="_blank" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);">GitHub</a></p>
+  <div class="resume-embed fade-in" style="margin-top:3rem;">
+    <object data="assets/jai-woods-resume.pdf" type="application/pdf">
+      <p>PDF preview unavailable in this browser. <a href="assets/jai-woods-resume.pdf" target="_blank" style="color:var(--accent);">Open the resume directly</a>.</p>
+    </object>
+    <div style="text-align:center; margin-top:1rem;">
+      <a href="assets/jai-woods-resume.pdf" target="_blank" class="portfolio-link" style="margin:0 auto;">Open Full Resume ↗</a>
+    </div>
   </div>
 </section>
 
 <section id="contact" class="content-section">
   <div class="fade-in">
-    <div class="section-label">04 — Contact</div>
+    <div class="section-label">05 — Contact</div>
     <h2 class="section-title">Let's Connect</h2>
     <div class="section-divider"></div>
     <p class="contact-text">Open to remote and in-person opportunities in GIS analysis, spatial data science, real estate analytics, and geospatial economic modeling. Always down to talk about economics, geography, or creative projects!</p>
@@ -373,52 +486,92 @@ if (typeof Globe === 'undefined') {
   document.getElementById('globe-container').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555570;font-size:0.9rem;">Globe loading failed — check your connection</div>';
 }
 </script>
-<script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
 const locations = [
-  { lat:38.4605, lng:-122.9465, label:"Sonoma County", category:"HOME", title:"Sonoma County, CA", body:"Home base — the rolling hills of West Sonoma County. Where it all started.", color:"#4fc3f7" },
-  { lat:34.4133, lng:-119.8610, label:"UCSB", category:"EDUCATION", title:"UC Santa Barbara", body:"Double major in Economics and Geography (GIS emphasis). Class of 2026. Where spatial analysis and economic theory clicked together.", color:"#4fc3f7" },
-  { lat:41.6611, lng:-91.5302, label:"Iowa City", category:"RESEARCH", title:"University of Iowa", body:"Edge of Space Program — drone-based LiDAR research over Ashton Prairie. 3D printed sensor housings, assembled Raspberry Pi payloads, launched 6 flights, and presented findings at a research symposium.", color:"#4fc3f7" },
-  { lat:47.6062, lng:-122.3321, label:"Seattle", category:"TRAVEL", title:"Seattle, WA", body:"The Pacific Northwest — exploring the intersection of tech, nature, and urban geography.", color:"#4fc3f7" },
-  { lat:-36.8485, lng:174.7633, label:"Auckland", category:"TRAVEL", title:"Auckland, New Zealand", body:"Explored Aotearoa — experiencing Polynesian culture and landscapes on the other side of the Pacific.", color:"#b388ff" },
-  { lat:16.0544, lng:108.2022, label:"Da Nang", category:"TRAVEL", title:"Da Nang, Vietnam", body:"Three-week deep dive into Vietnam's fastest-growing city. Exploring FDI trends, China+1 dynamics, and content creation on the coast.", color:"#b388ff" },
-  { lat:9.8482, lng:126.0458, label:"Siargao", category:"TRAVEL", title:"Siargao, Philippines", body:"Island life and aerial content. Captured drone footage across the surf capital of the Philippines.", color:"#b388ff" }
+  { lat:38.4605, lng:-122.9465, label:"Sonoma County", category:"HOME", title:"Sonoma County, CA", body:"Home base in West Sonoma County. Apprentice tradesman since 2019 working construction, electrical, and landscaping jobs, and now a GIS & Cartography Subcontractor for Barefoot Earthworks, mapping a 100+ acre retreat property development.", color:"#4fc3f7" },
+  { lat:34.4133, lng:-119.8610, label:"UCSB", category:"EDUCATION", title:"UC Santa Barbara", body:"B.A. Economics & Geography (GIS), Class of 2026. Geography Club Co-President, and where I ran a pumped-hydro suitability model and underwrote an 8-unit investment property with the Gaucho Real Estate Association.", color:"#4fc3f7" },
+  { lat:41.6611, lng:-91.5302, label:"Iowa City", category:"RESEARCH", title:"University of Iowa", body:"UAS Technician and Geospatial Data Researcher, Physics & Astronomy Dept. Built LiDAR/RGB sensor payloads for a DJI Matrice 300 RTK, flew 6 UAS missions over preserved grassland, and modeled canopy height with SfM photogrammetry.", color:"#4fc3f7" },
+  { lat:32.7157, lng:-117.1611, label:"San Diego", category:"CONFERENCE", title:"Esri User Conference, San Diego", body:"Esri Student Assistant, supporting technical sessions and workshops spanning Utility Network data, site surveying technology, and real estate data platforms.", color:"#4fc3f7" },
+  { lat:47.6062, lng:-122.3321, label:"Seattle", category:"TRAVEL", title:"Seattle, WA", body:"A personal trip to the Pacific Northwest, capturing drone footage and photography along the way.", color:"#4fc3f7" },
+  { lat:-36.8485, lng:174.7633, label:"Auckland", category:"TRAVEL", title:"Auckland, New Zealand", body:"Traveled through Aotearoa, capturing photography and drone footage across New Zealand's landscapes.", color:"#b388ff" },
+  { lat:16.0544, lng:108.2022, label:"Da Nang", category:"CREATIVE", title:"Da Nang, Vietnam", body:"Three weeks based on the coast creating drone photography and videography content.", color:"#b388ff" },
+  { lat:14.5995, lng:120.9842, label:"Manila", category:"CREATIVE", title:"Manila, Philippines", body:"Time in the capital creating photography and videography content before heading to the islands.", color:"#b388ff" },
+  { lat:9.8482, lng:126.0458, label:"Siargao", category:"CREATIVE", title:"Siargao, Philippines", body:"Drone photography and videography content across the surf capital of the Philippines.", color:"#b388ff" }
 ];
 
 const arcs = [
   { startLat:38.4605, startLng:-122.9465, endLat:34.4133, endLng:-119.8610 },
   { startLat:38.4605, startLng:-122.9465, endLat:41.6611, endLng:-91.5302 },
   { startLat:38.4605, startLng:-122.9465, endLat:47.6062, endLng:-122.3321 },
+  { startLat:34.4133, startLng:-119.8610, endLat:32.7157, endLng:-117.1611 },
   { startLat:34.4133, startLng:-119.8610, endLat:-36.8485, endLng:174.7633 },
   { startLat:34.4133, startLng:-119.8610, endLat:9.8482, endLng:126.0458 },
-  { startLat:9.8482, startLng:126.0458, endLat:16.0544, endLng:108.2022 },
+  { startLat:16.0544, startLng:108.2022, endLat:14.5995, endLng:120.9842 },
+  { startLat:14.5995, startLng:120.9842, endLat:9.8482, endLng:126.0458 },
 ];
 
 const container = document.getElementById('globe-container');
 
 if (typeof Globe !== 'undefined') {
 
+// Animated laser spires rising from each location to its label
+const spireGroups = [];
+function buildLaserSpire(colorHex) {
+  const group = new THREE.Group();
+  const streamHeight = 34;
+
+  // Tapered glowing beam (wide at the ground, narrowing skyward)
+  const beamGeo = new THREE.CylinderGeometry(0.12, 0.55, streamHeight, 16, 1, true);
+  beamGeo.translate(0, streamHeight / 2, 0);
+  const beamMat = new THREE.MeshBasicMaterial({
+    color: colorHex, transparent: true, opacity: 0.16,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+  });
+  const beam = new THREE.Mesh(beamGeo, beamMat);
+  group.add(beam);
+
+  // Soft glow ring anchoring the spire to the ground
+  const ringGeo = new THREE.RingGeometry(0.3, 1.3, 32);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: colorHex, transparent: true, opacity: 0.35,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = 0.05;
+  group.add(ring);
+
+  // Bright pulse that races up the beam like a laser charge
+  const pulseGeo = new THREE.SphereGeometry(0.45, 10, 10);
+  const pulseMat = new THREE.MeshBasicMaterial({
+    color: colorHex, transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  const pulse = new THREE.Mesh(pulseGeo, pulseMat);
+  pulse.scale.set(1, 2.4, 1);
+  group.add(pulse);
+
+  group.userData = { streamHeight, pulse, ring, phase: Math.random() };
+  spireGroups.push(group);
+  return group;
+}
+
 const globe = Globe()
   .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
   .atmosphereColor('#4fc3f7')
-  .atmosphereAltitude(0.2)
-  .pointsData(locations)
-  .pointLat('lat')
-  .pointLng('lng')
-  .pointAltitude(0.35)
-  .pointRadius(0.3)
-  .pointColor('color')
-  .pointResolution(6)
-  .onPointClick(d => showCard(d))
-  // Interactive HTML labels
+  .atmosphereAltitude(0.12)
+  // Interactive HTML labels — the only clickable element per location
   .htmlElementsData(locations)
   .htmlLat('lat')
   .htmlLng('lng')
   .htmlAltitude(0.36)
   .htmlElement(d => {
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'cursor:pointer;display:flex;flex-direction:column;align-items:center;';
+    wrapper.style.cssText = 'cursor:pointer;display:flex;flex-direction:column;align-items:center;pointer-events:auto;';
 
     const label = document.createElement('div');
     label.textContent = d.label;
@@ -457,15 +610,56 @@ const globe = Globe()
   .arcAltitudeAutoScale(0.4)
   (container);
 
+// Appended after Globe() init since it clears the container's contents on setup
+const fadeTop = document.createElement('div');
+fadeTop.className = 'globe-fade-top';
+fadeTop.setAttribute('aria-hidden', 'true');
+const fadeBottom = document.createElement('div');
+fadeBottom.className = 'globe-fade-bottom';
+fadeBottom.setAttribute('aria-hidden', 'true');
+container.appendChild(fadeTop);
+container.appendChild(fadeBottom);
+
 globe.controls().autoRotate = false;
-globe.controls().enableZoom = true;
+globe.controls().enableZoom = false; // let the page scroll normally over the globe — drag still rotates it
 globe.pointOfView({ lat: 34.41, lng: -119.86, altitude: 2.5 }, 0);
 
-const globeMaterial = globe.globeMaterial();
-if (typeof THREE !== 'undefined') {
-  globeMaterial.emissive = new THREE.Color(0x226688);
-  globeMaterial.emissiveIntensity = 0.75;
+// A dedicated point light (rather than a flat material emissive wash, which
+// crushed contrast into a hazy gray) brightens the terrain while keeping real shading
+const globeScene = globe.scene();
+const fillLight = new THREE.PointLight(0xffffff, 1.2, 800);
+fillLight.position.set(-200, 150, 300);
+globeScene.add(fillLight);
+
+// Add laser spires directly to the scene (avoids globe.gl's built-in custom-object
+// layer, whose animation controller has a bundling bug in the current CDN build)
+locations.forEach(d => {
+  const base = globe.getCoords(d.lat, d.lng, 0);
+  const baseVec = new THREE.Vector3(base.x, base.y, base.z);
+  const up = baseVec.clone().normalize();
+  const group = buildLaserSpire(d.color);
+  group.position.copy(baseVec);
+  group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+  globeScene.add(group);
+});
+
+function animateSpires(time) {
+  const t = time * 0.001;
+  spireGroups.forEach(group => {
+    const { streamHeight, pulse, ring, phase } = group.userData;
+    const progress = (t * 0.32 + phase) % 1;
+    pulse.position.y = progress * streamHeight;
+    const fade = Math.sin(progress * Math.PI);
+    pulse.material.opacity = 0.1 + fade * 0.85;
+    const pulseScale = 0.5 + fade * 0.7;
+    pulse.scale.set(pulseScale, pulseScale * 2.4, pulseScale);
+    ring.material.opacity = 0.25 + Math.sin(t * 2 + phase * 6.28) * 0.12;
+    const ringScale = 1 + Math.sin(t * 1.4 + phase * 6.28) * 0.1;
+    ring.scale.set(ringScale, ringScale, 1);
+  });
+  requestAnimationFrame(animateSpires);
 }
+requestAnimationFrame(animateSpires);
 
 function handleResize() { globe.width(container.offsetWidth); globe.height(container.offsetHeight); }
 window.addEventListener('resize', handleResize);
