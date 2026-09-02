@@ -486,9 +486,7 @@ if (typeof Globe === 'undefined') {
   document.getElementById('globe-container').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#555570;font-size:0.9rem;">Globe loading failed — check your connection</div>';
 }
 </script>
-<script type="module">
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-
+<script>
 const locations = [
   { lat:38.4605, lng:-122.9465, label:"Sonoma County", category:"HOME", title:"Sonoma County, CA", body:"Home base in West Sonoma County. Apprentice tradesman since 2019 working construction, electrical, and landscaping jobs, and now a GIS & Cartography Subcontractor for Barefoot Development, mapping a 100+ acre retreat property development.", color:"#4fc3f7" },
   { lat:34.4133, lng:-119.8610, label:"UCSB", category:"EDUCATION", title:"UC Santa Barbara", body:"B.A. Economics & Geography (GIS), Class of 2026. Geography Club Co-President, and where I ran a pumped-hydro suitability model and underwrote an 8-unit investment property with the Gaucho Real Estate Association.", color:"#4fc3f7" },
@@ -516,54 +514,28 @@ const container = document.getElementById('globe-container');
 
 if (typeof Globe !== 'undefined') {
 
-// Animated laser spires rising from each location to its label
-const spireGroups = [];
-function buildLaserSpire(colorHex) {
-  const group = new THREE.Group();
-  const streamHeight = 34;
-
-  // Tapered glowing beam (wide at the ground, narrowing skyward)
-  const beamGeo = new THREE.CylinderGeometry(0.12, 0.55, streamHeight, 16, 1, true);
-  beamGeo.translate(0, streamHeight / 2, 0);
-  const beamMat = new THREE.MeshBasicMaterial({
-    color: colorHex, transparent: true, opacity: 0.16,
-    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
-  });
-  const beam = new THREE.Mesh(beamGeo, beamMat);
-  group.add(beam);
-
-  // Soft glow ring anchoring the spire to the ground
-  const ringGeo = new THREE.RingGeometry(0.3, 1.3, 32);
-  const ringMat = new THREE.MeshBasicMaterial({
-    color: colorHex, transparent: true, opacity: 0.35,
-    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
-  });
-  const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.rotation.x = -Math.PI / 2;
-  ring.position.y = 0.05;
-  group.add(ring);
-
-  // Bright pulse that races up the beam like a laser charge
-  const pulseGeo = new THREE.SphereGeometry(0.45, 10, 10);
-  const pulseMat = new THREE.MeshBasicMaterial({
-    color: colorHex, transparent: true, opacity: 0.9,
-    blending: THREE.AdditiveBlending, depthWrite: false
-  });
-  const pulse = new THREE.Mesh(pulseGeo, pulseMat);
-  pulse.scale.set(1, 2.4, 1);
-  group.add(pulse);
-
-  group.userData = { streamHeight, pulse, ring, phase: Math.random() };
-  spireGroups.push(group);
-  return group;
-}
-
 const globe = Globe()
   .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
   .atmosphereColor('#4fc3f7')
   .atmosphereAltitude(0.12)
+  // Thin glowing beacon at each location (no click handler — labels are the only clickable element)
+  .pointsData(locations)
+  .pointLat('lat')
+  .pointLng('lng')
+  .pointAltitude(0.34)
+  .pointRadius(0.12)
+  .pointColor('color')
+  .pointResolution(6)
+  // Pulsing scanner ring animated outward from the ground point
+  .ringsData(locations)
+  .ringLat('lat')
+  .ringLng('lng')
+  .ringColor(d => t => `${d.color}${Math.round((1 - t) * 90).toString(16).padStart(2, '0')}`)
+  .ringMaxRadius(3.2)
+  .ringPropagationSpeed(1.4)
+  .ringRepeatPeriod(1400)
   // Interactive HTML labels — the only clickable element per location
   .htmlElementsData(locations)
   .htmlLat('lat')
@@ -624,42 +596,12 @@ globe.controls().autoRotate = false;
 globe.controls().enableZoom = false; // let the page scroll normally over the globe — drag still rotates it
 globe.pointOfView({ lat: 34.41, lng: -119.86, altitude: 2.5 }, 0);
 
-// A dedicated point light (rather than a flat material emissive wash, which
-// crushed contrast into a hazy gray) brightens the terrain while keeping real shading
-const globeScene = globe.scene();
-const fillLight = new THREE.PointLight(0xffffff, 1.2, 800);
-fillLight.position.set(-200, 150, 300);
-globeScene.add(fillLight);
-
-// Add laser spires directly to the scene (avoids globe.gl's built-in custom-object
-// layer, whose animation controller has a bundling bug in the current CDN build)
-locations.forEach(d => {
-  const base = globe.getCoords(d.lat, d.lng, 0);
-  const baseVec = new THREE.Vector3(base.x, base.y, base.z);
-  const up = baseVec.clone().normalize();
-  const group = buildLaserSpire(d.color);
-  group.position.copy(baseVec);
-  group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
-  globeScene.add(group);
-});
-
-function animateSpires(time) {
-  const t = time * 0.001;
-  spireGroups.forEach(group => {
-    const { streamHeight, pulse, ring, phase } = group.userData;
-    const progress = (t * 0.32 + phase) % 1;
-    pulse.position.y = progress * streamHeight;
-    const fade = Math.sin(progress * Math.PI);
-    pulse.material.opacity = 0.1 + fade * 0.85;
-    const pulseScale = 0.5 + fade * 0.7;
-    pulse.scale.set(pulseScale, pulseScale * 2.4, pulseScale);
-    ring.material.opacity = 0.25 + Math.sin(t * 2 + phase * 6.28) * 0.12;
-    const ringScale = 1 + Math.sin(t * 1.4 + phase * 6.28) * 0.1;
-    ring.scale.set(ringScale, ringScale, 1);
-  });
-  requestAnimationFrame(animateSpires);
-}
-requestAnimationFrame(animateSpires);
+// Brighten the terrain via the existing material's own Color instance (mutating it
+// in place, rather than constructing a new THREE object — the globe.gl bundle's
+// internal Three.js build isn't guaranteed compatible with a separately-loaded one)
+const globeMaterial = globe.globeMaterial();
+globeMaterial.emissive.set(0x333333);
+globeMaterial.emissiveIntensity = 0.6;
 
 function handleResize() { globe.width(container.offsetWidth); globe.height(container.offsetHeight); }
 window.addEventListener('resize', handleResize);
