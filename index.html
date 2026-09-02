@@ -596,13 +596,6 @@ globe.controls().autoRotate = false;
 globe.controls().enableZoom = false; // let the page scroll normally over the globe — drag still rotates it
 globe.pointOfView({ lat: 34.41, lng: -119.86, altitude: 2.5 }, 0);
 
-// Brighten the terrain via the existing material's own Color instance (mutating it
-// in place, rather than constructing a new THREE object — the globe.gl bundle's
-// internal Three.js build isn't guaranteed compatible with a separately-loaded one)
-const globeMaterial = globe.globeMaterial();
-globeMaterial.emissive.set(0x333333);
-globeMaterial.emissiveIntensity = 0.6;
-
 function handleResize() { globe.width(container.offsetWidth); globe.height(container.offsetHeight); }
 window.addEventListener('resize', handleResize);
 handleResize();
